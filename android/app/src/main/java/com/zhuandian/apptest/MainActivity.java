@@ -3,21 +3,100 @@ package com.zhuandian.apptest;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
+import android.view.View;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.zhuandian.apptest.utils.AppUtils;
 import com.zhuandian.apptest.utils.SystemUtil;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 
 public class MainActivity extends AppCompatActivity {
+
+    private TextView tvInfo;
+    Timer timer = new Timer();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        tvInfo = findViewById(R.id.tv_info);
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                StringBuilder stringBuilder = new StringBuilder();
+                stringBuilder.append("APP信息：")
+                        .append("\n")
+                        .append("应用程序名称：" + AppUtils.getAppName(MainActivity.this))
+                        .append("\n")
+                        .append("应用的版本名称：" + AppUtils.getVersionName(MainActivity.this))
+                        .append("\n")
+                        .append("应用的版本号：" + AppUtils.getVersionCode(MainActivity.this))
+                        .append("\n")
+                        .append("应用程序包名：" + AppUtils.getPackageName(MainActivity.this))
+                        .append("\n")
+                        .append("内存占用率：" + AppUtils.getUsedPercentValue(MainActivity.this))
+                        .append("\n")
+                        .append("\n")
+                        .append("系统参数：")
+                        .append("\n")
+                        .append("手机厂商：" + SystemUtil.getDeviceBrand())
+                        .append("\n")
+                        .append("手机型号：" + SystemUtil.getSystemModel())
+                        .append("\n")
+                        .append("手机当前系统语言：" + SystemUtil.getSystemLanguage())
+                        .append("\n")
+                        .append("Android系统版本号：" + SystemUtil.getSystemVersion())
+                        .append("\n")
+                        .append("CPU型号：" + SystemUtil.getCPUType())
+                        .append("\n")
+                        .append("磁盘信息：" + SystemUtil.getDevSpace())
+                        .append("\n")
+                        .append("设备ID：" + SystemUtil.DeviceId(MainActivity.this))
+                        .append("\n")
+                        .append("网速：" + SystemUtil.getNetSpeed());
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(MainActivity.this, "数据更新中...", Toast.LENGTH_SHORT).show();
+                        tvInfo.setText(stringBuilder.toString());
+                    }
+                });
+
+                uploadData();
+            }
+        }, 1000, 1000 * 60);
+
         showSystemParameter();
 
         getAppInfo();
+    }
+
+    private void uploadData() {
+        Entity entity = new Entity();
+        entity.setAppName(AppUtils.getAppName(this));
+        entity.setVersionName(AppUtils.getVersionName(this));
+        entity.setVersionCode(AppUtils.getVersionCode(this)+"");
+        entity.setPackageName(AppUtils.getPackageName(this));
+        entity.setUsedPercentValue(AppUtils.getUsedPercentValue(this));
+
+        entity.setDeviceBrand(SystemUtil.getDeviceBrand());
+        entity.setSystemModel(SystemUtil.getSystemModel());
+        entity.setSystemLanguage(SystemUtil.getSystemLanguage());
+        entity.setSystemVersion(SystemUtil.getSystemVersion());
+        entity.setCpuType(SystemUtil.getCPUType());
+        entity.setDevSpace(SystemUtil.getDevSpace());
+        entity.setDeviceId(SystemUtil.DeviceId(this));
+        entity.setNetSpeed(SystemUtil.getNetSpeed());
+
     }
 
     private void getAppInfo() {
