@@ -1,32 +1,36 @@
 package com.zhuandian.apptest;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
-import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.zhuandian.apptest.base.BaseActivity;
 import com.zhuandian.apptest.utils.AppUtils;
 import com.zhuandian.apptest.utils.SystemUtil;
+import com.zhuandian.apptest.utils.TimeUtils;
+import com.zhuandian.network.CallBack;
+import com.zhuandian.network.HttpEntity;
+import com.zhuandian.network.HttpManager;
 
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import io.reactivex.Observable;
 
-public class MainActivity extends AppCompatActivity {
+
+public class MainActivity extends BaseActivity {
 
     private TextView tvInfo;
     Timer timer = new Timer();
 
+    @Override
+    protected int getLayoutId() {
+        return R.layout.activity_main;
+    }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
+    protected void setUpView() {
         tvInfo = findViewById(R.id.tv_info);
         timer.schedule(new TimerTask() {
             @Override
@@ -66,7 +70,6 @@ public class MainActivity extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Toast.makeText(MainActivity.this, "数据更新中...", Toast.LENGTH_SHORT).show();
                         tvInfo.setText(stringBuilder.toString());
                     }
                 });
@@ -79,6 +82,8 @@ public class MainActivity extends AppCompatActivity {
 
         getAppInfo();
     }
+
+
 
     private void uploadData() {
         Entity entity = new Entity();
@@ -96,7 +101,23 @@ public class MainActivity extends AppCompatActivity {
         entity.setDevSpace(SystemUtil.getDevSpace());
         entity.setDeviceId(SystemUtil.DeviceId(this));
         entity.setNetSpeed(SystemUtil.getNetSpeed());
+        entity.setCreateAt(TimeUtils.getTimeStrNow());
+        entity.setUpdateAt(TimeUtils.getTimeStrNow());
 
+        Observable<HttpEntity<String>> observable = getApi().insertAppInfo(entity);
+        HttpManager.getInstance().doHttpRequest(activity, observable, new CallBack<String>() {
+            @Override
+            public void onSuccess(String result) {
+                if ("success".equals(result)){
+                    Toast.makeText(MainActivity.this, "数据更新成功...", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onError(Exception e) {
+                String message = e.getMessage();
+            }
+        });
     }
 
     private void getAppInfo() {
