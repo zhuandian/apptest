@@ -18,7 +18,7 @@ import java.util.Map;
  * date: 2021/2/26
  **/
 @RestController
-public class UserController {
+public class UserController  {
     @Autowired
     UserService userService;
 
