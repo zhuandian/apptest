@@ -3,9 +3,7 @@ package com.zhuandian.apptest.controller;
 import com.zhuandian.apptest.pojo.UserEntity;
 import com.zhuandian.apptest.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import utils.Response;
 
 import java.util.HashMap;
@@ -18,7 +16,7 @@ import java.util.Map;
  * date: 2021/2/26
  **/
 @RestController
-public class UserController  {
+public class UserController {
     @Autowired
     UserService userService;
 
@@ -37,5 +35,10 @@ public class UserController  {
         Map<String, Object> map = new HashMap<>();
         map.put("data", list);
         return Response.ok(map);
+    }
+
+    @PostMapping("/addNewUser")
+    public Response addNewUser(@RequestBody UserEntity userEntity) {
+        return userService.addNewUser(userEntity);
     }
 }

@@ -25,4 +25,6 @@ public class AppInfoEntity {
     private String devSpace;
     private String deviceId;
     private String netSpeed;
+    private String createAt;
+    private String updateAt;
 }
