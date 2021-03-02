@@ -1,0 +1,18 @@
+#home-root {
+    display: flex;
+    flex-direction: column;
+}
+
+#info-item {
+    margin: 5px;
+    padding: 5px;
+    background: white;
+    display: flex;
+    flex-direction: column;
+}
+
+#item-title {
+    margin-top: 5px;
+    font-size: 1.2rem;
+    color: black;
+}
