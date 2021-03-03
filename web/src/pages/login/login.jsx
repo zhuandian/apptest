@@ -28,6 +28,7 @@ export default class Home extends Component {
 
             let userEntity = result.data
             if (userEntity != null && userEntity.isBlack != 0) {
+                window.util.setStorage('user', JSON.stringify(result.data))
                 Toast.loading('登陆中..', 1, () => {
                     this.props.history.replace('/home')
                 });

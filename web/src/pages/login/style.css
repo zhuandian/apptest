@@ -60,3 +60,29 @@ input {
     height: 40px;
     line-height: 40px;
 }
+
+#comment-title {
+    margin: 10px;
+    font-size: 1.2rem;
+}
+
+#comment-view-item {
+    margin: 5px;
+    padding: 10px;
+    background: white;
+    display: flex;
+    flex-direction: column;
+}
+
+#btn-comment {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    height: 60px;
+    width: 60px;
+    color: white;
+    background: #2ab9ff;
+    text-align: center;
+    line-height: 60px;
+    border-radius: 30px;
+}

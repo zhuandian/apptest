@@ -28,7 +28,8 @@ export default class Home extends Component {
             query:itemEntity,
         }
 
-        this.props.history.push(path)
+        window.util.setStorage('appInfoEntity', JSON.stringify(itemEntity))
+        this.props.history.push('/detail')
     }
 
     render() {

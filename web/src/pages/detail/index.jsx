@@ -8,24 +8,42 @@ export default class Detail extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            appInfo: null
+            appInfo: null,
+            user: null,
+            commentArray: []
         }
     }
 
+
+
     async componentDidMount() {
-
-
-        let data = this.props.location.query;
-
+        let user = JSON.parse(window.util.getStorage('user'))
+        let data = JSON.parse(window.util.getStorage('appInfoEntity'));
 
         this.setState({
-            appInfo: data
+            appInfo: data,
+            user: user
         })
+
+        let params = {
+            "appInfoId": data.id
+        }
+
+        let result = await Api.getCommentListByAppInfoId(params)
+
+        this.setState({
+            commentArray: result.data
+        })
+
     }
 
 
+    goCommentPage() {
+        this.props.history.push("/comment?id=" + this.state.appInfo.id)
+    }
+
     render() {
-        let {appInfo} = this.state
+        let {appInfo, commentArray} = this.state
         return (
             <div id='detail-root'>
                 {
@@ -49,7 +67,23 @@ export default class Detail extends Component {
                         : <div></div>
                 }
 
+                <span id='comment-title'>评论列表</span>
+
+                {
+                    (commentArray || []).map((item, index) => {
+                        return <div id='comment-view-item'>
+                            <span>用户 {item.userName}说:</span>
+                            <span>{item.comment}</span>
+
+                        </div>
+                    })
+                }
+
+
+                <span id='btn-comment' onClick={() => this.goCommentPage()}>评论</span>
             </div>
         )
     }
+
+
 }
