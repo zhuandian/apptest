@@ -41,4 +41,9 @@ public class UserController {
     public Response addNewUser(@RequestBody UserEntity userEntity) {
         return userService.addNewUser(userEntity);
     }
+
+    @PostMapping("/login")
+    public Response login(@RequestBody UserEntity userEntity) {
+        return userService.login(userEntity.getUserName(),userEntity.getPassWord());
+    }
 }

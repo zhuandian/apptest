@@ -1,5 +1,6 @@
 package com.zhuandian.apptest.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.zhuandian.apptest.mapper.UserMapper;
 import com.zhuandian.apptest.pojo.UserEntity;
@@ -28,6 +29,28 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserEntity> impleme
         int insert = userMapper.insert(userEntity);
         Map<String, Object> map = new HashMap<>();
         map.put("data", insert == 1 ? "success" : "error");
+        return Response.ok(map);
+    }
+
+    @Override
+    public Response login(String userName, String passWord) {
+        UserEntity userEntity = null;
+        Map<String, Object> map = new HashMap<>();
+        try {
+            userEntity = userMapper.selectOne(new QueryWrapper<UserEntity>()
+                    .eq("userName", userName)
+                    .eq("passWord", passWord)
+            );
+        } catch (Exception e) {
+            map.put("msg", "登录失败");
+        }
+        if (userEntity != null) {
+            map.put("msg", "登录成功");
+            map.put("data", userEntity);
+        } else {
+            map.put("msg", "登录失败");
+        }
+
         return Response.ok(map);
     }
 }

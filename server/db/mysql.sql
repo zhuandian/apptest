@@ -31,3 +31,16 @@ CREATE TABLE IF NOT EXISTS  `user`(
     PRIMARY KEY (`id`)
 )ENGINE =InnoDB DEFAULT charset =utf8 COMMENT='用户信息'
 
+
+-- 评论
+CREATE TABLE IF NOT EXISTS  `comment`(
+    `id` bigint(20) UNSIGNED NOT NULL  AUTO_INCREMENT,
+    `userName` varchar (20) NOT NULL COMMENT '用户名',
+    `appInfoId` bigint(20) NOT NULL COMMENT 'app信息id',
+    `userId` bigint(20) NOT NULL COMMENT '用户ID',
+    `comment` text COMMENT '评论信息',
+    `createAt` varchar(60) DEFAULT NULL COMMENT '创建时间',
+    `updateAt` varchar(60) DEFAULT NULL COMMENT '更新时间',
+    PRIMARY KEY (`id`)
+)ENGINE =InnoDB DEFAULT charset =utf8 COMMENT='评论'
+

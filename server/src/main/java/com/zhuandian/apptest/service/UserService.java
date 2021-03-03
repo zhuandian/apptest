@@ -11,4 +11,6 @@ import utils.Response;
  **/
 public interface UserService extends IService<UserEntity> {
     Response addNewUser(UserEntity userEntity);
+
+    Response login(String userName, String passWord);
 }
