@@ -8,9 +8,13 @@ var baseUrl = "http://192.168.51.109:8080";
 class Api {
 
 
-    //账号登录
     getAllInfoList() {
         return get(baseUrl + '/getAllInfoList');
+    }
+
+    //账号登录
+    login(param) {
+        return post(baseUrl + '/login',param);
     }
 
 }
