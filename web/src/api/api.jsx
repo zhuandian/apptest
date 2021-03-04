@@ -28,6 +28,12 @@ class Api {
         return get(baseUrl + '/getCommentListByAppInfoId',param);
     }
 
+
+    //根据设备号获取所有上报信息
+    getAllInfoListByDeviceId(param) {
+        return get(baseUrl + '/getAllInfoListByDeviceId',param);
+    }
+
 }
 
 export default new Api()

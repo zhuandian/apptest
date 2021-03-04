@@ -1,0 +1,17 @@
+
+#detail-root {
+    display: flex;
+    flex-direction: column;
+
+}
+
+#chars-title {
+    margin: 10px;
+    margin-left: auto;
+    margin-right: auto;
+    font-size: 1.0rem;
+}
+
+#liquid{
+    height: 300px;
+}

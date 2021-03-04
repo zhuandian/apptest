@@ -39,12 +39,10 @@ export default class Home extends Component {
                 {
                     (appInfoArray || []).map((item, index) => {
                         return <div id='info-item' onClick={()=>this.goDetailPage(item)}>
-                            <span id='item-title'>应用信息</span>
-                            <span id='item-content'>设备id : {item.deviceId}</span>
-                            <span id='item-content'>应用名称 : {item.appName}</span>
-                            <span id='item-content'>版本号 : {item.versionCode}</span>
-                            <span id='item-content'>版本名称 : {item.versionName}</span>
-                            <span id='item-content'>应用包名 : {item.packageName}</span>
+                            <span id='item-title'>当前设备信息</span>
+
+
+
                             <span id='item-title'>系统信息</span>
                             <span id='item-content'>手机品牌 : {item.deviceBrand}</span>
                             <span id='item-content'>手机型号 : {item.systemModel}</span>

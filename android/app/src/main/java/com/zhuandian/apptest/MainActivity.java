@@ -1,5 +1,7 @@
 package com.zhuandian.apptest;
 
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageInfo;
 import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -12,6 +14,7 @@ import com.zhuandian.network.CallBack;
 import com.zhuandian.network.HttpEntity;
 import com.zhuandian.network.HttpManager;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -37,6 +40,8 @@ public class MainActivity extends BaseActivity {
             public void run() {
                 StringBuilder stringBuilder = new StringBuilder();
                 stringBuilder.append("APP信息：")
+                        .append("\n")
+                        .append("当前共安装APP数量 ：" + getAppInfo(3).size() + "个")
                         .append("\n")
                         .append("应用程序名称：" + AppUtils.getAppName(MainActivity.this))
                         .append("\n")
@@ -81,15 +86,16 @@ public class MainActivity extends BaseActivity {
         showSystemParameter();
 
         getAppInfo();
-    }
 
+
+    }
 
 
     private void uploadData() {
         Entity entity = new Entity();
         entity.setAppName(AppUtils.getAppName(this));
         entity.setVersionName(AppUtils.getVersionName(this));
-        entity.setVersionCode(AppUtils.getVersionCode(this)+"");
+        entity.setVersionCode(AppUtils.getVersionCode(this) + "");
         entity.setPackageName(AppUtils.getPackageName(this));
         entity.setUsedPercentValue(AppUtils.getUsedPercentValue(this));
 
@@ -103,12 +109,14 @@ public class MainActivity extends BaseActivity {
         entity.setNetSpeed(SystemUtil.getNetSpeed());
         entity.setCreateAt(TimeUtils.getTimeStrNow());
         entity.setUpdateAt(TimeUtils.getTimeStrNow());
+        List<AppInfo> appInfoList = getAppInfo(3);
+        entity.setAppCount(appInfoList.size());
 
         Observable<HttpEntity<String>> observable = getApi().insertAppInfo(entity);
         HttpManager.getInstance().doHttpRequest(activity, observable, new CallBack<String>() {
             @Override
             public void onSuccess(String result) {
-                if ("success".equals(result)){
+                if ("success".equals(result)) {
                     Toast.makeText(MainActivity.this, "数据更新成功...", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -142,6 +150,36 @@ public class MainActivity extends BaseActivity {
         Log.e(TAG, "网速：" + SystemUtil.getNetSpeed());
 //        Log.e(TAG, "CPU使用率：" + Long.parseLong(CPUUtil.getCurCpuFreq())/Long.parseLong(CPUUtil.getMaxCpuFreq()));
 
+    }
+
+
+    /**
+     * @param sign 1、本机全部app的信息 2、系统应用的信息 3、非系统应用的信息
+     * @return app的信息
+     */
+    public List<AppInfo> getAppInfo(int sign) {
+        List<AppInfo> appList = new ArrayList<AppInfo>(); //用来存储获取的应用信息数据　　　　　
+        List<PackageInfo> packages = getPackageManager().getInstalledPackages(0);
+        for (int i = 0; i < packages.size(); i++) {
+            PackageInfo packageInfo = packages.get(i);
+            AppInfo tmpInfo = new AppInfo();
+            tmpInfo.appName = packageInfo.applicationInfo.loadLabel(getPackageManager()).toString();
+            tmpInfo.packageName = packageInfo.packageName;
+            tmpInfo.versionName = packageInfo.versionName;
+            tmpInfo.versionCode = packageInfo.versionCode;
+            if (sign == 1) {//全手机全部应用
+                appList.add(tmpInfo);
+            } else if (sign == 2) {
+                if ((packageInfo.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) == 0) {
+                    appList.add(tmpInfo);//如果非系统应用，则添加至appList
+                }
+            } else if (sign == 3) {
+                if ((packageInfo.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) != 0) {
+                    appList.add(tmpInfo);//如果非系统应用，则添加至appList
+                }
+            }
+        }
+        return appList;
     }
 
 

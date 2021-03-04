@@ -15,6 +15,7 @@ CREATE TABLE IF NOT EXISTS `app_info`(
   `devSpace` varchar(30) NOT NULL COMMENT '',
   `deviceId` varchar(30) NOT NULL COMMENT '',
   `netSpeed` varchar(30) NOT NULL COMMENT '',
+  `appCount` int(16) NOT NULL  DEFAULT 0 COMMENT 'app数量',
   `createAt` varchar(60) DEFAULT NULL COMMENT '创建时间',
   `updateAt` varchar(60) DEFAULT NULL COMMENT '更新时间',
   PRIMARY KEY (`id`)
