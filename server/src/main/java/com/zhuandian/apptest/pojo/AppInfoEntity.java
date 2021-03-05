@@ -27,4 +27,5 @@ public class AppInfoEntity {
     private String netSpeed;
     private String createAt;
     private String updateAt;
+    private int appCount;
 }

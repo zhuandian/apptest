@@ -1,8 +1,10 @@
 package com.zhuandian.apptest.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.zhuandian.apptest.mapper.AppInfoMapper;
 import com.zhuandian.apptest.pojo.AppInfoEntity;
+import com.zhuandian.apptest.pojo.CommentEntity;
 import com.zhuandian.apptest.service.AppInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -34,6 +36,17 @@ public class AppInfoServiceImpl extends ServiceImpl<AppInfoMapper, AppInfoEntity
     public Response getAllInfoList() {
         List<AppInfoEntity> appInfoEntityList = appInfoMapper.selectList(null);
         Map<String, Object> map = new HashMap<>();
+        map.put("data", appInfoEntityList);
+        return Response.ok(map);
+    }
+
+    @Override
+    public Response getAllInfoListByDeviceId(String devicesId) {
+        List<AppInfoEntity> appInfoEntityList = appInfoMapper.selectList(new QueryWrapper<AppInfoEntity>()
+                .eq("deviceId", devicesId)
+        );
+        Map<String, Object> map = new HashMap<>();
+        map.put("msg", "success");
         map.put("data", appInfoEntityList);
         return Response.ok(map);
     }
