@@ -21,7 +21,16 @@ public class Entity {
     private String netSpeed;
     private String createAt;
     private String updateAt;
+    private int appCount;
 
+
+    public int getAppCount() {
+        return appCount;
+    }
+
+    public void setAppCount(int appCount) {
+        this.appCount = appCount;
+    }
 
     public String getCreateAt() {
         return createAt;
